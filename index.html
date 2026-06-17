@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stream Overlay Canvas</title>
+    <!-- FontAwesome for Gaming & Social Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- 1920x1080 Full HD Streaming Overlay Canvas -->
+    <div class="overlay-canvas">
+        
+        <!-- 1. Webcam Frame (Positioned Top Left) -->
+        <div class="webcam-container">
+            <div class="webcam-inner">
+                <!-- Visual feedback when testing in normal browsers -->
+                <div class="webcam-placeholder">
+                    <i class="fa-solid fa-gamepad"></i>
+                    <span>Preview Game / Cam</span>
+                </div>
+                <!-- Label that updates dynamically from control panel -->
+                <div class="webcam-label" id="webcamLabel">
+                    <i class="fa-solid fa-video"></i> STREAMING LIVE
+                </div>
+                <!-- Cute 2D Anime Chibi Mascot -->
+                <div class="anime-mascot"></div>
+            </div>
+        </div>
+
+        <!-- 2. Alert Notification Box (Centered at Top, slides down on trigger) -->
+        <div class="alert-box glass-panel" id="alertBox">
+            <i class="fa-solid fa-star alert-icon" id="alertIcon"></i>
+            <div class="alert-content">
+                <div class="alert-title" id="alertTitle">Pemberitahuan</div>
+                <div class="alert-message" id="alertMessage">Menunggu aktivitas baru...</div>
+            </div>
+        </div>
+
+        <!-- 3. Stream Status/Stats Bar (Positioned Top Right) -->
+        <div class="stats-bar glass-panel">
+            <!-- Latest Subscriber -->
+            <div class="stat-item">
+                <i class="fa-solid fa-heart stat-icon"></i>
+                <div class="stat-details">
+                    <span class="stat-label">Terbaru</span>
+                    <span class="stat-value" id="subValue">Rafi_Gamer</span>
+                </div>
+            </div>
+            <!-- Top Donation -->
+            <div class="stat-item">
+                <i class="fa-solid fa-dollar-sign stat-icon"></i>
+                <div class="stat-details">
+                    <span class="stat-label">Donasi</span>
+                    <span class="stat-value" id="donationValue">Budi_Luhur (Rp 100K)</span>
+                </div>
+            </div>
+            <!-- Sub Goal Progress -->
+            <div class="stat-item">
+                <i class="fa-solid fa-bullseye stat-icon"></i>
+                <div class="stat-details">
+                    <span class="stat-label">Target Sub</span>
+                    <span class="stat-value" id="goalValue">742 / 1000</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. Glassmorphic Chatbox (Positioned Bottom Left) -->
+        <div class="chatbox-container glass-panel">
+            <div class="chatbox-header">
+                <div class="chat-dot"></div>
+                <i class="fa-solid fa-comments"></i> Live Chat Stream
+            </div>
+            <div class="chat-messages" id="chatMessages">
+                <!-- Dynamically populated or simulated chats appear here -->
+                <div class="chat-item">
+                    <span class="chat-username user-color-2">Moderator_Bot</span>
+                    <span class="chat-message">Selamat datang di live streaming! Gunakan control panel untuk menguji alert box dan mengganti warna tema neon secara real-time.</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. Rotating Social Media handles (Positioned Bottom Right) -->
+        <div class="social-rotator glass-panel">
+            <!-- Youtube Slide -->
+            <div class="social-slide active">
+                <i class="fa-brands fa-youtube social-icon"></i>
+                <span class="social-handle" id="ytHandle">RyanPahlevi TV</span>
+            </div>
+            <!-- Instagram Slide -->
+            <div class="social-slide">
+                <i class="fa-brands fa-instagram social-icon"></i>
+                <span class="social-handle" id="igHandle">@ryan_pahlevi</span>
+            </div>
+            <!-- TikTok Slide -->
+            <div class="social-slide">
+                <i class="fa-brands fa-tiktok social-icon"></i>
+                <span class="social-handle">@ryan_pahlevi.stream</span>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Real-time Synchronization Script -->
+    <script src="script.js"></script>
+</body>
+</html>

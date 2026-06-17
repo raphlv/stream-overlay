@@ -1,0 +1,700 @@
+/* Import Google Fonts (Fredoka for cute rounded look & Outfit for clean body text) */
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap');
+
+:root {
+    /* Theme color variables - Kawaii/Anime Pastel palette */
+    --bg-dark: #120f1d;
+    --bg-card: rgba(29, 24, 46, 0.75);
+    --border-color: rgba(255, 255, 255, 0.08);
+    
+    --color-primary: #ff7bb0;     /* Sakura Pink */
+    --color-secondary: #9d8df2;   /* Kawaii Lavender */
+    --color-success: #67ebc3;     /* Mint Green */
+    --color-warning: #ffcf78;     /* Honey Yellow */
+    --color-text: #ffffff;
+    --color-text-muted: #a39cb5;
+    
+    /* Soft pastel glow effects */
+    --glow-primary: 0 0 12px rgba(255, 123, 176, 0.4);
+    --glow-secondary: 0 0 12px rgba(157, 141, 242, 0.4);
+    --glow-card: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Fredoka', sans-serif;
+    color: var(--color-text);
+    overflow: hidden;
+    background: transparent; /* Transparent for OBS Studio */
+}
+
+/* ==========================================================================
+   CONTROL PANEL LIGHT MODE - KAWAII PASTEL THEME
+   ========================================================================== */
+body.control-page {
+    background: linear-gradient(135deg, #fff0f5 0%, #f0f3ff 50%, #e8e8ff 100%);
+    overflow-y: auto;
+    min-height: 100vh;
+    color: #43395c;
+}
+
+body.control-page :root {
+    --border-color: rgba(0, 0, 0, 0.06);
+}
+
+/* ==========================================================================
+   STREAM OVERLAY CANVAS (1920x1080)
+   ========================================================================== */
+.overlay-canvas {
+    width: 1920px;
+    height: 1080px;
+    position: relative;
+    background: transparent;
+}
+
+/* Kawaii Glassmorphism panel base */
+.glass-panel {
+    background: var(--bg-card);
+    border: 2px solid rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 18px;
+    box-shadow: var(--glow-card);
+}
+
+/* ==========================================================================
+   WEBCAM BORDER WITH MASCOT IN CLOUD-FRAME
+   ========================================================================== */
+.webcam-container {
+    position: absolute;
+    top: 50px;
+    left: 50px;
+    width: 420px;
+    height: 260px;
+    border-radius: 20px;
+    padding: 4px;
+    background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+    box-shadow: var(--glow-primary);
+}
+
+.webcam-inner {
+    width: 100%;
+    height: 100%;
+    background: #191626;
+    border-radius: 16px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 2D Anime Chibi Mascot positioning */
+.anime-mascot {
+    position: absolute;
+    width: 90px;
+    height: 90px;
+    bottom: -15px;
+    right: -25px;
+    background: url('mascot.png') no-repeat center center/contain;
+    z-index: 10;
+    animation: floatMascot 4s ease-in-out infinite alternate;
+    filter: drop-shadow(0 6px 8px rgba(0, 0, 0, 0.25));
+}
+
+.webcam-placeholder {
+    font-family: 'Fredoka', sans-serif;
+    font-weight: 600;
+    letter-spacing: 1px;
+    color: var(--color-text-muted);
+    font-size: 1.1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.webcam-placeholder i {
+    font-size: 2.2rem;
+    color: var(--color-primary);
+    text-shadow: var(--glow-primary);
+}
+
+.webcam-label {
+    position: absolute;
+    bottom: -12px;
+    left: 40px;
+    background: linear-gradient(135deg, var(--color-primary), #ff5d9e);
+    box-shadow: var(--glow-primary);
+    padding: 6px 18px;
+    border-radius: 30px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+    border: 2px solid #fff;
+}
+
+/* ==========================================================================
+   STREAM ALERTS (Cute speech-bubble-like banner)
+   ========================================================================== */
+.alert-box {
+    position: absolute;
+    top: 50px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-180px);
+    width: 520px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    padding: 16px 28px;
+    gap: 1.25rem;
+    border: 3px solid var(--color-primary);
+    border-radius: 24px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+    transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s ease;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 100;
+    background: #1d182e;
+}
+
+.alert-box.active {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+}
+
+.alert-icon {
+    font-size: 2.4rem;
+    color: var(--color-primary);
+    text-shadow: var(--glow-primary);
+    animation: heartBeat 1.2s infinite;
+}
+
+.alert-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.alert-title {
+    font-family: 'Fredoka', sans-serif;
+    font-weight: 700;
+    font-size: 1.3rem;
+    color: var(--color-primary);
+    letter-spacing: 0.5px;
+}
+
+.alert-message {
+    font-size: 0.95rem;
+    color: #fff;
+    font-weight: 500;
+    margin-top: 2px;
+}
+
+/* ==========================================================================
+   CHATBOX WIDGET (Soft dialog bubble messages)
+   ========================================================================== */
+.chatbox-container {
+    position: absolute;
+    top: 670px;
+    left: 50px;
+    width: 380px;
+    height: 360px;
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    overflow: hidden;
+}
+
+.chatbox-header {
+    font-family: 'Fredoka', sans-serif;
+    font-weight: 600;
+    font-size: 1rem;
+    color: var(--color-primary);
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.05);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.chat-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--color-success);
+    box-shadow: 0 0 10px var(--color-success);
+    animation: blink 1s infinite alternate;
+}
+
+.chat-messages {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    overflow: hidden;
+}
+
+.chat-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    animation: slideUp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.15) forwards;
+    background: rgba(255, 255, 255, 0.04);
+    padding: 8px 12px;
+    border-radius: 12px;
+    border-left: 3px solid var(--color-secondary);
+}
+
+.chat-username {
+    font-family: 'Fredoka', sans-serif;
+    font-weight: 600;
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+}
+
+.chat-message {
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.85rem;
+    line-height: 1.4;
+    color: #efebf5;
+    word-break: break-word;
+}
+
+/* Colors for chat usernames */
+.user-color-1 { color: #ff85a1; }
+.user-color-2 { color: #85e3ff; }
+.user-color-3 { color: #85ffc7; }
+.user-color-4 { color: #ffe685; }
+.user-color-5 { color: #c485ff; }
+
+/* ==========================================================================
+   SUPPORT TICKER (Stat pills)
+   ========================================================================== */
+.stats-bar {
+    position: absolute;
+    top: 50px;
+    left: 1240px;
+    width: 630px;
+    height: 55px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    align-items: center;
+    padding: 0 1rem;
+    gap: 0.75rem;
+}
+
+.stat-item {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    height: 35px;
+    padding: 0 8px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 12px;
+}
+
+.stat-icon {
+    font-size: 1.15rem;
+    color: var(--color-primary);
+    text-shadow: var(--glow-primary);
+}
+
+.stat-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-label {
+    font-size: 0.65rem;
+    font-weight: 500;
+    color: var(--color-text-muted);
+}
+
+.stat-value {
+    font-size: 0.85rem;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* ==========================================================================
+   SOCIAL ROTATOR
+   ========================================================================== */
+.social-rotator {
+    position: absolute;
+    top: 982px;
+    left: 1610px;
+    height: 48px;
+    width: 260px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 1.25rem;
+    border-radius: 14px;
+}
+
+.social-slide {
+    display: none;
+    align-items: center;
+    gap: 0.75rem;
+    width: 100%;
+    animation: fadeIn 0.4s ease-out forwards;
+}
+
+.social-slide.active {
+    display: flex;
+}
+
+.social-icon {
+    font-size: 1.3rem;
+    color: var(--color-primary);
+    text-shadow: var(--glow-primary);
+}
+
+.social-handle {
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+/* ==========================================================================
+   KEYFRAME ANIMATIONS
+   ========================================================================== */
+@keyframes floatMascot {
+    0% { transform: translateY(0) rotate(0deg); }
+    100% { transform: translateY(-8px) rotate(4deg); }
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); filter: brightness(1); }
+    100% { transform: scale(1.08); filter: brightness(1.1); }
+}
+
+@keyframes heartBeat {
+    0% { transform: scale(1); }
+    14% { transform: scale(1.2); }
+    28% { transform: scale(1); }
+    42% { transform: scale(1.2); }
+    70% { transform: scale(1); }
+}
+
+@keyframes blink {
+    0% { opacity: 0.4; }
+    100% { opacity: 1; }
+}
+
+@keyframes slideUp {
+    0% { transform: translateY(15px); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes fadeIn {
+    0% { opacity: 0; transform: scale(0.97); }
+    100% { opacity: 1; transform: scale(1); }
+}
+
+
+/* ==========================================================================
+   CONTROL PANEL LIGHT MODE (SPECIFIC CLASSES)
+   ========================================================================== */
+.dashboard-container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1.5rem;
+}
+
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    border-bottom: 2px solid rgba(0, 0, 0, 0.05);
+    padding-bottom: 1.5rem;
+}
+
+.dashboard-title h1 {
+    font-weight: 700;
+    font-size: 2.2rem;
+    background: linear-gradient(135deg, var(--color-primary), #d86297);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.dashboard-title p {
+    color: #7b7095;
+    font-size: 0.95rem;
+    margin-top: 0.25rem;
+}
+
+.status-badge {
+    background: rgba(255, 123, 176, 0.1);
+    border: 2px solid var(--color-primary);
+    padding: 6px 18px;
+    border-radius: 30px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--color-primary);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.grid-3 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1.5rem;
+}
+
+.panel-card {
+    background: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    border-radius: 24px;
+    box-shadow: 0 8px 20px rgba(71, 62, 107, 0.05);
+    padding: 1.5rem;
+}
+
+.panel-card-title {
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: #4a3e6c;
+    margin-bottom: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.panel-card-title i {
+    color: var(--color-primary);
+}
+
+.form-group {
+    margin-bottom: 1.25rem;
+}
+
+.form-label {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #7c7297;
+    margin-bottom: 0.5rem;
+}
+
+.form-input {
+    width: 100%;
+    background: #fcfbfe;
+    border: 2px solid #eae7f2;
+    padding: 10px 14px;
+    border-radius: 12px;
+    color: #43395c;
+    font-family: 'Fredoka', sans-serif;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    background: #fff;
+    box-shadow: 0 0 10px rgba(255, 123, 176, 0.15);
+}
+
+.color-pickers {
+    display: flex;
+    gap: 1rem;
+}
+
+.color-picker-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.color-picker-input {
+    width: 100%;
+    height: 42px;
+    border: 2px solid #eae7f2;
+    border-radius: 12px;
+    background: transparent;
+    cursor: pointer;
+}
+
+.btn {
+    background: linear-gradient(135deg, var(--color-primary), #ff5a98);
+    color: #fff;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-family: 'Fredoka', sans-serif;
+    transition: all 0.3s ease;
+    width: 100%;
+    box-shadow: 0 6px 15px rgba(255, 123, 176, 0.25);
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(255, 123, 176, 0.4);
+}
+
+.btn-secondary {
+    background: linear-gradient(135deg, var(--color-secondary), #8472ec);
+    box-shadow: 0 6px 15px rgba(157, 141, 242, 0.25);
+}
+
+.btn-secondary:hover {
+    box-shadow: 0 8px 20px rgba(157, 141, 242, 0.4);
+}
+
+.btn-outline {
+    background: transparent;
+    border: 2px solid #eae7f2;
+    color: #7b7095;
+    box-shadow: none;
+}
+
+.btn-outline:hover {
+    background: #eae7f2;
+    color: #4a3e6c;
+    transform: none;
+}
+
+/* Live Preview block for Light Theme */
+.preview-pane-wrapper {
+    margin-top: 2rem;
+    background: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    border-radius: 28px;
+    box-shadow: 0 10px 30px rgba(71, 62, 107, 0.06);
+    padding: 1.5rem;
+}
+
+.preview-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.preview-status {
+    font-size: 0.8rem;
+    color: #7b7095;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.preview-frame-container {
+    width: 100%;
+    aspect-ratio: 16/9;
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+    border: 3px dashed #eae7f2;
+    background: #191626; /* Keeps black canvas representation */
+}
+
+/* Visual Editor Canvas & Draggable Widgets */
+.editor-canvas-container {
+    width: 100%;
+    position: relative;
+    background: #0d0a1b;
+    border-radius: 20px;
+    border: 3px solid #eae7f2;
+    overflow: hidden;
+    aspect-ratio: 16/9;
+}
+
+.editor-canvas-bg {
+    width: 1920px;
+    height: 1080px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform-origin: top left;
+    background: radial-gradient(circle, #251b3d 0%, #0d0a1b 100%);
+    pointer-events: none;
+}
+
+.editor-widget-wrapper {
+    position: absolute;
+    border: 2px dashed rgba(255, 255, 255, 0.35);
+    border-radius: 14px;
+    cursor: move;
+    user-select: none;
+    z-index: 5;
+    background: rgba(29, 24, 46, 0.6);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.editor-widget-wrapper:hover, .editor-widget-wrapper.active {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 15px rgba(255, 123, 176, 0.4);
+    background: rgba(29, 24, 46, 0.85);
+}
+
+.editor-widget-content {
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    pointer-events: none;
+    color: #fff;
+    font-family: 'Fredoka', sans-serif;
+}
+
+.editor-widget-content i {
+    font-size: 1.8rem;
+    margin-bottom: 0.4rem;
+    color: var(--color-primary);
+}
+
+.editor-widget-label {
+    position: absolute;
+    top: -24px;
+    left: 0;
+    background: var(--color-primary);
+    color: #fff;
+    font-size: 0.7rem;
+    padding: 2px 8px;
+    border-radius: 6px;
+    white-space: nowrap;
+    pointer-events: none;
+    font-family: 'Fredoka', sans-serif;
+    font-weight: 600;
+}
+
+.editor-widget-resize-handle {
+    width: 16px;
+    height: 16px;
+    background: #ffffff;
+    border: 3px solid var(--color-primary);
+    border-radius: 50%;
+    position: absolute;
+    bottom: -8px;
+    right: -8px;
+    cursor: se-resize;
+    z-index: 10;
+}
+
+.editor-widget-resize-handle:hover {
+    background: var(--color-primary);
+    transform: scale(1.2);
+}
+

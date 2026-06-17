@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stream Overlay Control Panel</title>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="control-page">
+
+    <div class="dashboard-container">
+        
+        <!-- Header -->
+        <header class="dashboard-header">
+            <div class="dashboard-title">
+                <h1>StreamOverlay Dashboard</h1>
+                <p>Panel Kontrol Interaktif Real-Time untuk Pengaturan OBS Overlay Anda</p>
+            </div>
+            <!-- Status indicator -->
+            <div class="status-badge">
+                <div class="chat-dot"></div>
+                OBS Link Active
+            </div>
+        </header>
+
+        <!-- Main Configuration Panels (3-Column Layout) -->
+        <div class="grid-3">
+            
+            <!-- Panel 1: Theme & Identity Settings -->
+            <div class="panel-card glass-panel">
+                <h2 class="panel-card-title">
+                    <i class="fa-solid fa-palette"></i> Desain & Warna Tema
+                </h2>
+                
+                <div class="form-group">
+                    <label class="form-label">Warna Neon Utama</label>
+                    <div class="color-pickers">
+                        <div class="color-picker-wrapper">
+                            <input type="color" id="primaryColor" class="color-picker-input" value="#ff007f">
+                            <span style="font-size: 0.75rem; text-align: center; color: var(--color-text-muted);">Primary Neon</span>
+                        </div>
+                        <div class="color-picker-wrapper">
+                            <input type="color" id="secondaryColor" class="color-picker-input" value="#00f0ff">
+                            <span style="font-size: 0.75rem; text-align: center; color: var(--color-text-muted);">Secondary Neon</span>
+                        </div>
+                    </div>
+                </div>
+
+                <form id="labelsForm" onsubmit="event.preventDefault();">
+                    <div class="form-group">
+                        <label class="form-label" for="webcamText">Label Kamera Webcam</label>
+                        <input type="text" id="webcamText" class="form-input" value="STREAMING LIVE">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="ytHandleInput">Youtube Handle</label>
+                        <input type="text" id="ytHandleInput" class="form-input" value="RyanPahlevi TV">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="igHandleInput">Instagram Handle</label>
+                        <input type="text" id="igHandleInput" class="form-input" value="@ryan_pahlevi">
+                    </div>
+                </form>
+            </div>
+
+            <!-- Panel 2: Live Alert Box Trigger -->
+            <div class="panel-card glass-panel">
+                <h2 class="panel-card-title">
+                    <i class="fa-solid fa-bell"></i> Pemicu Alert Box
+                </h2>
+                
+                <!-- Subscriber Alert trigger -->
+                <div style="background: rgba(255,255,255,0.02); padding: 1rem; border-radius: 6px; border: 1px solid var(--border-color); margin-bottom: 1rem;">
+                    <span class="form-label" style="color: var(--color-primary);">Alert Subscriber Baru</span>
+                    <div class="form-group">
+                        <input type="text" id="alertSubUser" class="form-input" placeholder="Nama Subscriber..." value="Pangeran Ryan">
+                    </div>
+                    <button id="btnTriggerSub" class="btn">
+                        <i class="fa-solid fa-heart"></i> Latih / Trigger Sub Alert
+                    </button>
+                </div>
+
+                <!-- Donation Alert trigger -->
+                <div style="background: rgba(255,255,255,0.02); padding: 1rem; border-radius: 6px; border: 1px solid var(--border-color);">
+                    <span class="form-label" style="color: var(--color-success);">Alert Donasi Baru</span>
+                    <div class="form-group" style="display: flex; gap: 0.5rem; margin-bottom: 0.5rem;">
+                        <input type="text" id="alertDonUser" class="form-input" placeholder="Nama Donatur..." value="Budi Luhur" style="flex: 2;">
+                        <input type="text" id="alertDonAmount" class="form-input" placeholder="Jumlah..." value="Rp 50,000" style="flex: 1.5;">
+                    </div>
+                    <button id="btnTriggerDonation" class="btn btn-secondary">
+                        <i class="fa-solid fa-dollar-sign"></i> Trigger Donasi Alert
+                    </button>
+                </div>
+            </div>
+
+            <!-- Panel 3: Live Chat Simulator & Stats Bar Label -->
+            <div class="panel-card glass-panel" style="display: flex; flex-direction: column; justify-content: space-between;">
+                <div>
+                    <h2 class="panel-card-title">
+                        <i class="fa-solid fa-comments"></i> Simulasi Chat & Stats
+                    </h2>
+                    
+                    <!-- Simulates incoming chat -->
+                    <div class="form-group">
+                        <label class="form-label">Username Chat</label>
+                        <input type="text" id="chatUser" class="form-input" value="Sobat_Streamer">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Isi Pesan Chat</label>
+                        <textarea id="chatMsg" class="form-input" placeholder="Tulis sesuatu di sini..." style="resize: none; height: 60px;">Keren banget animasinya gan! Transparansinya rapih.</textarea>
+                    </div>
+                    <button id="btnSendChat" class="btn btn-outline" style="margin-bottom: 1.5rem;">
+                        <i class="fa-solid fa-paper-plane"></i> Kirim Simulasi Chat
+                    </button>
+                </div>
+
+                <!-- Stats Bar label editor -->
+                <div style="border-top: 1px solid var(--border-color); padding-top: 1rem;">
+                    <span class="form-label">Teks Bar Status (Top Right)</span>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-top: 0.5rem;">
+                        <div>
+                            <span style="font-size: 0.65rem; color: var(--color-text-muted);">Subscriber Terbaru</span>
+                            <input type="text" id="subText" class="form-input" value="Rafi_Gamer" style="padding: 6px; font-size: 0.8rem;">
+                        </div>
+                        <div>
+                            <span style="font-size: 0.65rem; color: var(--color-text-muted);">Target Sub</span>
+                            <input type="text" id="goalText" class="form-input" value="742 / 1000" style="padding: 6px; font-size: 0.8rem;">
+                        </div>
+                    </div>
+                    <div style="margin-top: 0.5rem;">
+                        <span style="font-size: 0.65rem; color: var(--color-text-muted);">Donasi Terakhir</span>
+                        <input type="text" id="donationText" class="form-input" value="Budi_Luhur (Rp 100K)" style="padding: 6px; font-size: 0.8rem;">
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Row 2: YouTube Integration & Layout Position Customizer -->
+        <div class="grid-3" style="margin-top: 1.5rem;">
+            
+            <!-- Card 1: YouTube Live Chat Integration -->
+            <div class="panel-card glass-panel">
+                <h2 class="panel-card-title">
+                    <i class="fa-brands fa-youtube" style="color: #ff0000;"></i> YouTube Live Chat
+                </h2>
+                <p style="font-size: 0.8rem; color: #7b7095; margin-bottom: 1rem; line-height: 1.4;">
+                    Hubungkan chatbox langsung ke siaran YouTube Anda menggunakan Video ID dan Google API Key.
+                </p>
+                <div class="form-group">
+                    <label class="form-label" for="ytVideoId">YouTube Video ID / URL</label>
+                    <input type="text" id="ytVideoId" class="form-input" placeholder="Contoh: dQw4w9WgXcQ atau URL stream">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="ytApiKey">Google API Key</label>
+                    <input type="password" id="ytApiKey" class="form-input" placeholder="Masukkan API Key Google Cloud">
+                </div>
+                <div style="display: flex; gap: 0.5rem; align-items: center;">
+                    <button id="btnConnectYT" class="btn btn-secondary" style="flex: 2;">
+                        <i class="fa-solid fa-link"></i> Hubungkan Chat
+                    </button>
+                    <button id="btnDisconnectYT" class="btn btn-outline" style="flex: 1; display: none;">
+                        Putus
+                    </button>
+                </div>
+                <div id="ytConnectionStatus" style="margin-top: 0.85rem; font-size: 0.8rem; color: #7b7095; display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="fa-solid fa-circle-notch fa-spin" style="display: none;" id="ytLoadingSpinner"></i>
+                    <span id="ytStatusText">Status: Belum Terhubung</span>
+                </div>
+            </div>
+
+            <!-- Card 2: Kustomisasi Tata Letak Widget -->
+            <div class="panel-card glass-panel" style="grid-column: span 2;">
+                <h2 class="panel-card-title">
+                    <i class="fa-solid fa-arrows-up-down-left-right"></i> Kustomisasi Posisi Widget
+                </h2>
+                <p style="font-size: 0.8rem; color: #7b7095; margin-bottom: 1.25rem; line-height: 1.4;">
+                    Pindahkan posisi horizontal (X), vertikal (Y), dan skala ukuran dari masing-masing widget secara real-time.
+                </p>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 1rem;">
+                    
+                    <!-- Webcam Layout -->
+                    <div style="background: #fbf9fe; padding: 0.75rem; border-radius: 12px; border: 1px solid #eae7f2;">
+                        <span class="form-label" style="color: var(--color-primary); font-weight: 700; font-size: 0.75rem;">Bingkai Webcam</span>
+                        <div style="margin-top: 0.5rem;">
+                            <span style="font-size: 0.7rem; color: #7c7297; display: flex; justify-content: space-between;">
+                                <span>Posisi X</span>
+                                <b><span id="val_webcam_x">50</span>px</b>
+                            </span>
+                            <input type="range" id="slider_webcam_x" min="0" max="1500" value="50" style="width:100%; accent-color: var(--color-primary);">
+                        </div>
+                        <div style="margin-top: 0.25rem;">
+                            <span style="font-size: 0.7rem; color: #7c7297; display: flex; justify-content: space-between;">
+                                <span>Posisi Y</span>
+                                <b><span id="val_webcam_y">50</span>px</b>
+                            </span>
+                            <input type="range" id="slider_webcam_y" min="0" max="820" value="50" style="width:100%; accent-color: var(--color-primary);">
+                        </div>
+                        <div style="margin-top: 0.25rem;">
+                            <span style="font-size: 0.7rem; color: #7c7297; display: flex; justify-content: space-between;">
+                                <span>Ukuran Skala</span>
+                                <b><span id="val_webcam_s">100</span>%</b>
+                            </span>
+                            <input type="range" id="slider_webcam_s" min="50" max="150" value="100" style="width:100%; accent-color: var(--color-primary);">
+                        </div>
+                    </div>
+
+                    <!-- Chatbox Layout -->
+                    <div style="background: #fbf9fe; padding: 0.75rem; border-radius: 12px; border: 1px solid #eae7f2;">
+                        <span class="form-label" style="color: var(--color-secondary); font-weight: 700; font-size: 0.75rem;">Kotak Live Chat</span>
+                        <div style="margin-top: 0.5rem;">
+                            <span style="font-size: 0.7rem; color: #7c7297; display: flex; justify-content: space-between;">
+                                <span>Posisi X</span>
+                                <b><span id="val_chatbox_x">50</span>px</b>
+                            </span>
+                            <input type="range" id="slider_chatbox_x" min="0" max="1500" value="50" style="width:100%; accent-color: var(--color-secondary);">
+                        </div>
+                        <div style="margin-top: 0.25rem;">
+                            <span style="font-size: 0.7rem; color: #7c7297; display: flex; justify-content: space-between;">
+                                <span>Posisi Y</span>
+                                <b><span id="val_chatbox_y">670</span>px</b>
+                            </span>
+                            <input type="range" id="slider_chatbox_y" min="0" max="820" value="670" style="width:100%; accent-color: var(--color-secondary);">
+                        </div>
+                        <div style="margin-top: 0.25rem;">
+                            <span style="font-size: 0.7rem; color: #7c7297; display: flex; justify-content: space-between;">
+                                <span>Ukuran Skala</span>
+                                <b><span id="val_chatbox_s">100</span>%</b>
+                            </span>
+                            <input type="range" id="slider_chatbox_s" min="50" max="150" value="100" style="width:100%; accent-color: var(--color-secondary);">
+                        </div>
+                    </div>
+
+                    <!-- Stats Bar Layout -->
+                    <div style="background: #fbf9fe; padding: 0.75rem; border-radius: 12px; border: 1px solid #eae7f2;">
+                        <span class="form-label" style="color: var(--color-success); font-weight: 700; font-size: 0.75rem;">Ticker Status (Stats)</span>
+                        <div style="margin-top: 0.5rem;">
+                            <span style="font-size: 0.7rem; color: #7c7297; display: flex; justify-content: space-between;">
+                                <span>Posisi X</span>
+                                <b><span id="val_stats_x">1240</span>px</b>
+                            </span>
+                            <input type="range" id="slider_stats_x" min="0" max="1500" value="1240" style="width:100%; accent-color: var(--color-success);">
+                        </div>
+                        <div style="margin-top: 0.25rem;">
+                            <span style="font-size: 0.7rem; color: #7c7297; display: flex; justify-content: space-between;">
+                                <span>Posisi Y</span>
+                                <b><span id="val_stats_y">50</span>px</b>
+                            </span>
+                            <input type="range" id="slider_stats_y" min="0" max="820" value="50" style="width:100%; accent-color: var(--color-success);">
+                        </div>
+                        <div style="margin-top: 0.25rem;">
+                            <span style="font-size: 0.7rem; color: #7c7297; display: flex; justify-content: space-between;">
+                                <span>Ukuran Skala</span>
+                                <b><span id="val_stats_s">100</span>%</b>
+                            </span>
+                            <input type="range" id="slider_stats_s" min="50" max="150" value="100" style="width:100%; accent-color: var(--color-success);">
+                        </div>
+                    </div>
+
+                    <!-- Social Rotator Layout -->
+                    <div style="background: #fbf9fe; padding: 0.75rem; border-radius: 12px; border: 1px solid #eae7f2;">
+                        <span class="form-label" style="color: var(--color-warning); font-weight: 700; font-size: 0.75rem;">Rotator Sosial Media</span>
+                        <div style="margin-top: 0.5rem;">
+                            <span style="font-size: 0.7rem; color: #7c7297; display: flex; justify-content: space-between;">
+                                <span>Posisi X</span>
+                                <b><span id="val_social_x">1610</span>px</b>
+                            </span>
+                            <input type="range" id="slider_social_x" min="0" max="1920" value="1610" style="width:100%; accent-color: var(--color-warning);">
+                        </div>
+                        <div style="margin-top: 0.25rem;">
+                            <span style="font-size: 0.7rem; color: #7c7297; display: flex; justify-content: space-between;">
+                                <span>Posisi Y</span>
+                                <b><span id="val_social_y">982</span>px</b>
+                            </span>
+                            <input type="range" id="slider_social_y" min="0" max="1080" value="982" style="width:100%; accent-color: var(--color-warning);">
+                        </div>
+                        <div style="margin-top: 0.25rem;">
+                            <span style="font-size: 0.7rem; color: #7c7297; display: flex; justify-content: space-between;">
+                                <span>Ukuran Skala</span>
+                                <b><span id="val_social_s">100</span>%</b>
+                            </span>
+                            <input type="range" id="slider_social_s" min="50" max="150" value="100" style="width:100%; accent-color: var(--color-warning);">
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Interactive Live Preview Frame (WOW factor for potential buyers) -->
+        <div class="preview-pane-wrapper glass-panel">
+            <div class="preview-header">
+                <h2 class="panel-card-title" style="margin-bottom: 0;">
+                    <i class="fa-solid fa-arrows-to-eye"></i> Editor Tata Letak Visual (Drag & Resize)
+                </h2>
+                <div class="preview-status">
+                    <i class="fa-solid fa-circle-check" style="color: var(--color-success);"></i>
+                    <span>Klik & geser widget di bawah ini secara langsung! Tarik ujung kanan bawah untuk mengubah ukuran.</span>
+                </div>
+            </div>
+            
+            <div class="editor-canvas-container" id="editorCanvasContainer">
+                <div class="editor-canvas-bg"></div>
+                
+                <!-- 1. Webcam Widget Block -->
+                <div class="editor-widget-wrapper" id="widget_webcam" style="width: 420px; height: 260px;">
+                    <div class="editor-widget-label" style="background: var(--color-primary);"><i class="fa-solid fa-video"></i> Kamera / Webcam</div>
+                    <div class="editor-widget-content">
+                        <i class="fa-solid fa-gamepad" style="color: var(--color-primary);"></i>
+                        <span style="font-size: 0.95rem; font-weight: 600;">Bingkai Webcam</span>
+                        <span style="font-size: 0.75rem; color: #a39cb5; margin-top: 4px;" id="widget_webcam_coords">50px, 50px</span>
+                    </div>
+                    <div class="editor-widget-resize-handle"></div>
+                </div>
+
+                <!-- 2. Chatbox Widget Block -->
+                <div class="editor-widget-wrapper" id="widget_chatbox" style="width: 380px; height: 360px;">
+                    <div class="editor-widget-label" style="background: var(--color-secondary);"><i class="fa-solid fa-comments"></i> Live Chatbox</div>
+                    <div class="editor-widget-content">
+                        <i class="fa-solid fa-comment" style="color: var(--color-secondary);"></i>
+                        <span style="font-size: 0.95rem; font-weight: 600;">Kotak Obrolan</span>
+                        <span style="font-size: 0.75rem; color: #a39cb5; margin-top: 4px;" id="widget_chatbox_coords">50px, 670px</span>
+                    </div>
+                    <div class="editor-widget-resize-handle"></div>
+                </div>
+
+                <!-- 3. Stats Bar Widget Block -->
+                <div class="editor-widget-wrapper" id="widget_stats" style="width: 630px; height: 55px;">
+                    <div class="editor-widget-label" style="background: var(--color-success);"><i class="fa-solid fa-chart-line"></i> Ticker Stats</div>
+                    <div class="editor-widget-content" style="flex-direction: row; gap: 8px;">
+                        <i class="fa-solid fa-list" style="color: var(--color-success); margin-bottom: 0;"></i>
+                        <span style="font-size: 0.95rem; font-weight: 600;">Bar Status</span>
+                        <span style="font-size: 0.75rem; color: #a39cb5;" id="widget_stats_coords">1240px, 50px</span>
+                    </div>
+                    <div class="editor-widget-resize-handle"></div>
+                </div>
+
+                <!-- 4. Social Rotator Widget Block -->
+                <div class="editor-widget-wrapper" id="widget_social" style="width: 260px; height: 48px;">
+                    <div class="editor-widget-label" style="background: var(--color-warning); color: #43395c;"><i class="fa-solid fa-share-nodes"></i> Sosial Rotator</div>
+                    <div class="editor-widget-content" style="flex-direction: row; gap: 6px;">
+                        <i class="fa-solid fa-hashtag" style="color: var(--color-warning); margin-bottom: 0;"></i>
+                        <span style="font-size: 0.95rem; font-weight: 600;">Sosial Media</span>
+                        <span style="font-size: 0.75rem; color: #a39cb5;" id="widget_social_coords">1610px, 982px</span>
+                    </div>
+                    <div class="editor-widget-resize-handle"></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Sync logic scripts -->
+    <script src="script.js"></script>
+</body>
+</html>

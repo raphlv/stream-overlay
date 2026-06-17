@@ -1,0 +1,38 @@
+{
+    "theme": {
+        "primaryColor": "#ff7bb0",
+        "secondaryColor": "#9d8df2"
+    },
+    "labels": {
+        "webcamText": "STREAMING LIVE",
+        "subText": "Rafi_Gamer",
+        "donationText": "Budi_Luhur (Rp 100K)",
+        "goalText": "742 \/ 1000",
+        "ytHandle": "RyanPahlevi TV",
+        "igHandle": "@ryan_pahlevi"
+    },
+    "layout": {
+        "webcam": {
+            "x": 50,
+            "y": 50,
+            "scale": 100
+        },
+        "chatbox": {
+            "x": 50,
+            "y": 670,
+            "scale": 100
+        },
+        "stats": {
+            "x": 1240,
+            "y": 50,
+            "scale": 100
+        },
+        "social": {
+            "x": 1610,
+            "y": 982,
+            "scale": 100
+        }
+    },
+    "latestAlert": null,
+    "chats": []
+}
